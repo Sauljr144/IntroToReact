@@ -7,6 +7,8 @@ import {BsFillCalendarDateFill} from 'react-icons/bs';
 import {AiOutlineHeart} from 'react-icons/ai';
 import {AiFillHeart} from 'react-icons/ai';
 import Like from "./components/Like";
+import NavBar from "./components/NavBar";
+import Cart from "./components/Cart";
 
 
 
@@ -72,11 +74,44 @@ const handleCustomerClick = () =>{
   setCustomer({...customer, address: {...customer.address, zipCode: 94566 }})
 }
 
+//Updating Arrays//
+const [tags, setTags] = useState(['happy ', 'cheerful ']);
 
+const handleAddClick = () =>{
+  //Adding to the array, we use the spread operator to copy the original array and adding the new element
+  setTags([...tags, 'exciting ']);
+}
+
+const handleRemoveClick = ()=>{
+  // Rmoving happy using the filter method
+  setTags(tags.filter(tag => tag !== 'happy '));
+}
+
+const handleUpdateClick = ()=>{
+  // Using the map method to update the array.
+  setTags(tags.map(x => x === 'happy ' ? 'happiness ':x))
+}
+
+// Updating an Array of Objects
+const [bugs, setBugs] = useState([
+  {id: 1, title: 'Bug 1', fixed: false},
+  {id: 2, title: 'Bug 2', fixed: false},
+])
+
+const Bugs = ()=>{
+  //using map function to find the id, copy the object and change the object
+  setBugs(bugs.map(bug => bug.id === 1 ? {...bug, fixed: true} : bug))
+  console.log(bugs)
+}
+
+const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
 
   return (
     <div>
+      {/* This shows how many item are in the ccart */}
+      <NavBar cartItemCout={cartItem.length} />
+      <Cart cartItems={cartItem} onClear={()=>setCartItem([])}/>
       <Message/>
       {/* <Message/>
       <Message/> */}
@@ -91,10 +126,15 @@ const handleCustomerClick = () =>{
       {/* This statement allows to show alert and not show it. */}
       {viewAlert === true ? <Alert close={() => setViewAlert(false)}>Test</Alert> : null}
       
+      <p>{bugs.map(bug => <p key={bug.id}>{bug.id} {bug.fixed ? 'fixed':'new'}</p>)}</p>
+      <Button onClick={Bugs} Color="info">Bug Fixed</Button><span></span>
       <Button onClick={handleAgainAnotherClick} Color="primary">Drink</Button><span>{drink.price}</span>
       <Button onClick={() => setViewAlert(true)} Color="warning">Show Alert</Button>
       <Button onClick={handelAnotherClick} Color="info">Visible</Button><span>{count}</span>
       <Button onClick={handleCustomerClick} Color="info">Customer</Button><span>{customer.address.zipCode}</span>
+      <Button onClick={handleAddClick} Color="info">Add Mood</Button><span>{tags}</span>
+      <Button onClick={handleRemoveClick} Color="info">Remove Happy</Button><span>{tags}</span>
+      <Button onClick={handleUpdateClick} Color="info">Update</Button><span>{tags}</span>
 
       <ListGroup items={items} heading='Cities' onSelectItem={handleSelectItem}/>
       <ListGroup items={students} heading='Students' onSelectItem={handleSelectItem}/>
