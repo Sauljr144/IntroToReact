@@ -9,6 +9,11 @@ import {AiFillHeart} from 'react-icons/ai';
 import Like from "./components/Like";
 import NavBar from "./components/NavBar";
 import Cart from "./components/Cart";
+import Form from "./components/Form";
+import FormStateExample from "./components/FormStateExample";
+import UseRefExample from "./components/UseRefExample";
+import ReactFormsExample from "./components/ReactFormsExample";
+
 
 
 
@@ -109,6 +114,9 @@ const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
   return (
     <div>
+      <UseRefExample/>
+
+      
       {/* This shows how many item are in the ccart */}
       <NavBar cartItemCout={cartItem.length} />
       <Cart cartItems={cartItem} onClear={()=>setCartItem([])}/>
@@ -138,6 +146,10 @@ const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
       <ListGroup items={items} heading='Cities' onSelectItem={handleSelectItem}/>
       <ListGroup items={students} heading='Students' onSelectItem={handleSelectItem}/>
+      
+      <Form/>
+      <FormStateExample/>
+      <ReactFormsExample/>
     </div>
   
   );
