@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import Alert from "./components/Alert";
 import Button from "./components/Button/Button";
@@ -13,6 +13,11 @@ import Form from "./components/Form";
 import FormStateExample from "./components/FormStateExample";
 import UseRefExample from "./components/UseRefExample";
 import ReactFormsExample from "./components/ReactFormsExample";
+import UseEffectExample from "./components/UseEffectExample";
+import ProductList from "./components/ProductList";
+import CleanUpEx from "./components/CleanUpEx";
+import UsersWAxios from "./components/UsersWAxios";
+import DataFetch from "./components/DataFetch";
 
 
 
@@ -111,9 +116,36 @@ const Bugs = ()=>{
 
 const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
+  const ref = useRef<HTMLInputElement>(null);
+  
+
+  //After render
+  useEffect(() => {
+    //side effect
+    if(ref.current)ref.current.focus();
+  }, [])
+
+  useEffect(()=>{
+    document.title = 'This is cool'
+  })
+
+  const [category, setCategory] = useState('')
 
   return (
     <div>
+      <DataFetch/>
+      <UsersWAxios/>
+      <CleanUpEx/>
+       <select onChange={(e) => setCategory(e.target.value)} className='form-select my-5'>
+            <option value=""></option>
+            <option value="Clothing">Clothing</option>
+            <option value="Household">Household</option>
+        </select>
+
+      <ProductList category={category}/>
+      
+      <input ref={ref} type="text" className="form-control" />
+      <UseEffectExample/>
       <UseRefExample/>
 
       

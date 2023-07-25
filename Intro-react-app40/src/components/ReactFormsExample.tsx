@@ -1,13 +1,35 @@
 import React, { FormEvent } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Using the third party library Zod to create our object with our properties
+const schema = z.object({
+  name: z.string().min(3,{message: 'Name must be at least characters.'}),
+  age: z.number({invalid_type_error: 'Age field is required.'}).min(18, {message: 'Age must be at least 18.'}),
+});
+
+// creating type to pasing in our object
+type FormData = z.infer<typeof schema>;
+
+// interface to create our properties
+// interface FormData{
+//   name: string,
+//   age: number 
+// }
 
 const ReactFormsExample = () => {
-  // destructing the usForm and calling just the register object from useForm(). Also grabbing the handleSubmit from useForm
-  const { register, handleSubmit, formState:{errors} } = useForm();
-//   console.log(formState.errors);
+  // destructing the useForm and calling just the register object from useForm(). Also grabbing the handleSubmit from useForm
+  // Passing in the interface <FormData>
+  // inside of use form we pass in our zod resolver and pass in our schema
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  //   console.log(formState.errors);
 
   const onSubmit = (data: FieldValues) => console.log(data);
-
 
   return (
     <>
@@ -21,16 +43,14 @@ const ReactFormsExample = () => {
           </label>
           {/* copying the property and setting the property we want  */}
           <input
-            {...register("name", {required: true, minLength: 3})}
+            {...register("name")}
             id="name"
             type="text"
             className="form-control"
           />
           {/* Validation for our name field, '&&' shortcut of a ternry operator */}
-            {errors.name?.type === 'required' && <p className="text-danger">The name field is required.</p>}
-            {errors.name?.type === 'minLength' && <p className="text-danger">The name must be at least 3 characters long.</p>}
+          {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </div>
-
 
         <div className="mb-3">
           <label htmlFor="age" className="form-label">
@@ -38,13 +58,14 @@ const ReactFormsExample = () => {
           </label>
           {/* copying the property and setting the property we want  */}
           <input
-            {...register("age")}
+            {...register("age", {valueAsNumber:true})}
             id="age"
             type="number"
             className="form-control"
           />
+          {errors.age && <p className="text-danger">{errors.age.message}</p>}
         </div>
-        <button className="btn btn-primary" type="submit">
+        <button disabled={!isValid} className="btn btn-primary" type="submit">
           Submit
         </button>
       </form>
