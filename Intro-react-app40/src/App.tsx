@@ -18,6 +18,11 @@ import ProductList from "./components/ProductList";
 import CleanUpEx from "./components/CleanUpEx";
 import UsersWAxios from "./components/UsersWAxios";
 import DataFetch from "./components/DataFetch";
+import AsyncWait from "./components/AsyncWait";
+import CancelFetch from "./components/CancelFetch";
+import LoadingIndicator from "./components/LoadingIndicator";
+import CreateData from "./components/CreateData";
+import DeleteData from "./components/DeleteData";
 
 
 
@@ -133,6 +138,11 @@ const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
   return (
     <div>
+      <CreateData/>
+      <DeleteData/>
+      <LoadingIndicator/>
+      <CancelFetch/>
+      <AsyncWait/>
       <DataFetch/>
       <UsersWAxios/>
       <CleanUpEx/>
