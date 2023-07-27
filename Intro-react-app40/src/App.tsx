@@ -23,6 +23,7 @@ import CancelFetch from "./components/CancelFetch";
 import LoadingIndicator from "./components/LoadingIndicator";
 import CreateData from "./components/CreateData";
 import DeleteData from "./components/DeleteData";
+import Updating from "./components/Updating";
 
 
 
@@ -138,6 +139,7 @@ const [cartItem, setCartItem] = useState(['Product1', 'Product2']);
 
   return (
     <div>
+      <Updating/>
       <CreateData/>
       <DeleteData/>
       <LoadingIndicator/>

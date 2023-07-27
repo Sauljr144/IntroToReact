@@ -1,5 +1,6 @@
-import axios, { CanceledError } from "axios";
+
 import React, { useEffect, useState } from "react";
+import APIClient, {CanceledError} from '../services/API-Client';
 
 interface User {
   id: number;
@@ -16,7 +17,7 @@ const LoadingIndicator = () => {
     const controller = new AbortController();
     // set it to true in our useEffect before fetching data
     setIsLoading(true);
-    axios
+    APIClient
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
       })

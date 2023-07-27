@@ -1,5 +1,6 @@
-import axios, { CanceledError } from "axios";
+
 import React, { useEffect, useState } from "react";
+import APIClient, {CanceledError} from '../services/API-Client';
 
 //interface to
 interface User {
@@ -16,7 +17,7 @@ useEffect(() => {
       // Browser function to abort fetch
       const controller = new AbortController();
       // passing in the signal from Axios
-      axios
+      APIClient
         .get<User[]>("https://jsonplaceholder.typicode.com/users", {
           signal: controller.signal,
         })

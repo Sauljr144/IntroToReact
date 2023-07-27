@@ -1,5 +1,6 @@
-import axios, { CanceledError } from 'axios';
+
 import React, { useEffect, useState } from 'react'
+import APIClient, {CanceledError} from '../services/API-Client';
 
 interface User {
     id: number;
@@ -15,7 +16,7 @@ const DeleteData = () => {
       const controller = new AbortController();
   
       setIsLoading(true);
-      axios
+      APIClient
         .get<User[]>("https://jsonplaceholder.typicode.com/users", {
           signal: controller.signal,
         })

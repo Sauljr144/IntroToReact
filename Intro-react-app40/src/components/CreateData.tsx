@@ -1,5 +1,6 @@
-import axios, { CanceledError } from "axios";
+
 import React, { useEffect, useState } from "react";
+import APIClient, {CanceledError} from '../services/API-Client';
 
 interface User {
   id: number;
@@ -15,7 +16,7 @@ const CreateData = () => {
     const controller = new AbortController();
 
     setIsLoading(true);
-    axios
+    APIClient
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
       })
@@ -34,13 +35,17 @@ const CreateData = () => {
 
 // Adding user
   const addUser = () =>{
+    const orginalUsers = [...users]
     const newUser = {id: 0, name: 'Bryan'};
     //setting setUser by adding the newUser variable to a new array with the users spread in the array
     setUsers([newUser,...users]);
     // adding our data to our endpoint
-    axios.post("https://jsonplaceholder.typicode.com/users",newUser)
-    .then(response => setUsers([response.data, ...users])) //becomes permanent and we spread our users
-
+    APIClient.post("https://jsonplaceholder.typicode.com/users",newUser)
+    .then(({data: savedUser}) => setUsers([savedUser, ...users])) //becomes permanent and we spread our users
+    .catch(error =>{
+      setError(error.message);
+      setUsers(orginalUsers);
+    })
   }
 
   
