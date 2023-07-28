@@ -18,7 +18,7 @@ useEffect(() => {
       const controller = new AbortController();
       // passing in the signal from Axios
       APIClient
-        .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+        .get<User[]>("/users", {
           signal: controller.signal,
         })
         .then(response => setUsers(response.data))

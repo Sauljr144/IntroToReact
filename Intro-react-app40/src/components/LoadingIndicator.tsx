@@ -18,7 +18,7 @@ const LoadingIndicator = () => {
     // set it to true in our useEffect before fetching data
     setIsLoading(true);
     APIClient
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+      .get<User[]>("/users", {
         signal: controller.signal,
       })
       //   setting logic in our response

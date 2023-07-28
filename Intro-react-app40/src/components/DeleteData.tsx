@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import APIClient, {CanceledError} from '../services/API-Client';
+import userService from '../services/user-service';
 
 interface User {
     id: number;
@@ -13,13 +14,10 @@ const DeleteData = () => {
     const [isLoading, setIsLoading] = useState(false);
   
     useEffect(() => {
-      const controller = new AbortController();
   
       setIsLoading(true);
-      APIClient
-        .get<User[]>("https://jsonplaceholder.typicode.com/users", {
-          signal: controller.signal,
-        })
+      const { request, cancel } = userService.getAll<User>();
+      request
         .then((response) => {
           setUsers(response.data);
           setIsLoading(false);
@@ -30,12 +28,18 @@ const DeleteData = () => {
           setIsLoading(false);
         });
   
-      return () => controller.abort();
+        return () => cancel();
     }, []);
   
     const deleteUser = (user:User) => {
+      const orginalUsers = [...users];
       // Filter will iterate through our users and if the u.id does not equal the user.id we will get a render of new users minus the ones we delete.
       setUsers(users.filter(u => u.id !== user.id))
+      userService.delete(user.id)
+      .catch(error =>{
+        setError(error.message);
+        setUsers(orginalUsers);
+      })
     }
   
     return (

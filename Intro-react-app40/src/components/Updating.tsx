@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import APIClient, {CanceledError} from '../services/API-Client';
+import userService from '../services/user-service';
 
 
 interface User {
@@ -17,10 +18,8 @@ const Updating = () => {
       const controller = new AbortController();
   
       setIsLoading(true);
-      APIClient
-        .get<User[]>("https://jsonplaceholder.typicode.com/users", {
-          signal: controller.signal,
-        })
+      const { request, cancel } = userService.getAll<User>();
+    request
         .then((response) => {
           setUsers(response.data);
           setIsLoading(false);
@@ -31,7 +30,7 @@ const Updating = () => {
           setIsLoading(false);
         });
   
-      return () => controller.abort();
+      return () => cancel();
     }, []);
   
   // Adding user
@@ -41,7 +40,7 @@ const Updating = () => {
       //setting setUser by adding the newUser variable to a new array with the users spread in the array
       setUsers([newUser,...users]);
       // adding our data to our endpoint
-      APIClient.post("https://jsonplaceholder.typicode.com/users",newUser)
+      APIClient.post("/users",newUser)
       .then(({data: savedUser}) => setUsers([savedUser, ...users])) //becomes permanent and we spread our users
       .catch(error =>{
         setError(error.message);
@@ -54,7 +53,7 @@ const Updating = () => {
         const orginalUsers = [...users]
         const updatedUser = {...user, name: user.name + '!'};
         setUsers(users.map(u => u.id === user.id ? updatedUser : u))
-        APIClient.patch("https://jsonplaceholder.typicode.com/users/" + user.id, updatedUser) //add the foward slash send to correct url
+        userService.update(updatedUser)
         .catch(error =>{
             setError(error.message)
             setUsers(orginalUsers)
