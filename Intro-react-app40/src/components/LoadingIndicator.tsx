@@ -1,6 +1,6 @@
 
-import React, { useEffect, useState } from "react";
-import APIClient, {CanceledError} from '../services/API-Client';
+
+import useUsers from "../hooks/useUsers";
 
 interface User {
   id: number;
@@ -8,32 +8,7 @@ interface User {
 }
 
 const LoadingIndicator = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState("");
-  // use state for our loading indicator
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    // set it to true in our useEffect before fetching data
-    setIsLoading(true);
-    APIClient
-      .get<User[]>("/users", {
-        signal: controller.signal,
-      })
-      //   setting logic in our response
-      .then((response) => {
-        setUsers(response.data);
-        setIsLoading(false); //once getting data back it sets it to false
-      }) 
-      .catch((error) => {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(false); //if there's an error it is set to fals
-      });
-
-    return () => controller.abort();
-  }, []);
+  const {users, error, isLoading, setUsers, setError} = useUsers();
 
   return (
     <div>

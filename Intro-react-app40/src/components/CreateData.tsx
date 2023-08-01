@@ -1,33 +1,12 @@
-import React, { useEffect, useState } from "react";
-import APIClient, { CanceledError } from "../services/API-Client";
-import userService from "../services/user-service";
 
-interface User {
-  id: number;
-  name: string;
-}
+import userService from "../services/user-service";
+import useUsers from "../hooks/useUsers";
+
+
 
 const CreateData = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const { request, cancel } = userService.getAll<User>();
-    request
-      .then((response) => {
-        setUsers(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(false);
-      });
-
-    return () => cancel();
-  }, []);
+  // using our custom hook
+ const {users, error, isLoading, setUsers, setError} = useUsers();
 
   // Adding user
   const addUser = () => {

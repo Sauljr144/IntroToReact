@@ -1,35 +1,11 @@
 
-import React, { useEffect, useState } from 'react'
-import APIClient, {CanceledError} from '../services/API-Client';
-import userService from '../services/user-service';
+import userService, { User } from '../services/user-service';
+import useUsers from '../hooks/useUsers';
 
-interface User {
-    id: number;
-    name: string;
-  }
+
 
 const DeleteData = () => {
-    const [users, setUsers] = useState<User[]>([]);
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-  
-    useEffect(() => {
-  
-      setIsLoading(true);
-      const { request, cancel } = userService.getAll<User>();
-      request
-        .then((response) => {
-          setUsers(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          if (error instanceof CanceledError) return;
-          setError(error.message);
-          setIsLoading(false);
-        });
-  
-        return () => cancel();
-    }, []);
+  const {users, error, isLoading, setUsers, setError} = useUsers();
   
     const deleteUser = (user:User) => {
       const orginalUsers = [...users];
